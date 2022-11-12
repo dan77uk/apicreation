@@ -86,7 +86,7 @@ describe("/api/treasures", () => {
       });
   });
 
-  test.only("GET: 200 - can sort an array of treasures by specified colour query", () => {
+  test("GET: 200 - can sort an array of treasures by specified colour query", () => {
     return request(app)
       .get("/api/treasures?colour=magenta")
       .expect(200)

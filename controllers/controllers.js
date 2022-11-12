@@ -1,4 +1,5 @@
-const { selectTreasures } = require("../models/models");
+const { selectTreasures } = require("../models/selectTreasures");
+const { insertTreasure } = require("../models/insertTreasure");
 
 exports.getTreasures = (req, res, next) => {
   const { sort_by, order, colour } = req.query;
@@ -9,4 +10,13 @@ exports.getTreasures = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.postTreasure = (req, res, next) => {
+  const body = req.body;
+  insertTreasure(body)
+    .then((insertedTreasure) => {
+      res.status(201).send({ treasure: insertedTreasure });
+    })
+    .catch(next);
 };
