@@ -1,6 +1,7 @@
 const { selectTreasures } = require("../models/selectTreasures");
 const { insertTreasure } = require("../models/insertTreasure");
 const { updateTreasure } = require("../models/updateTreasure");
+const { deleteTreasureById } = require("../models/deleteTreasureById");
 
 exports.getTreasures = (req, res, next) => {
   const { sort_by, order, colour } = req.query;
@@ -25,6 +26,15 @@ exports.patchTreasure = (req, res, next) => {
   updateTreasure(treasure_id, req.body)
     .then((updatedTreasure) => {
       res.status(201).send({ treasure: updatedTreasure });
+    })
+    .catch(next);
+};
+
+exports.deleteTreasure = (req, res, next) => {
+  const { treasure_id } = req.params;
+  deleteTreasureById(treasure_id)
+    .then((result) => {
+      res.status(204).send();
     })
     .catch(next);
 };
