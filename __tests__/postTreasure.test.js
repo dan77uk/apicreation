@@ -59,4 +59,43 @@ describe("POST /api/treasures", () => {
           });
       });
   });
+
+  it("Should reject inserton when required fields are missing from POST", () => {
+    return request(app)
+      .post("/api/treasures")
+      .send({
+        treasure_name: "Martin Guitar",
+        colour: "guitar-colour",
+        age: 60,
+        cost_at_auction: 5000,
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Missing required fields");
+      });
+  });
+
+  it("Treasures table size should remain the same if insertion fails", () => {
+    return db
+      .query(`SELECT COUNT (treasure_id) FROM treasures;`)
+      .then(({ rows }) => {
+        const originalTableSize = Number(rows[0].count);
+        return request(app)
+          .post("/api/treasures")
+          .send({
+            treasure_name: "Martin Guitar",
+            colour: "guitar-colour",
+            age: 60,
+            cost_at_auction: 5000,
+          })
+          .expect(400)
+          .then(() => {
+            return db
+              .query(`SELECT COUNT (treasure_id) FROM treasures;`)
+              .then(({ rows }) => {
+                expect(Number(rows[0].count)).toBe(originalTableSize);
+              });
+          });
+      });
+  });
 });
