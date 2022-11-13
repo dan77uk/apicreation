@@ -6,7 +6,8 @@ exports.selectTreasures = (
   colour,
   max_age,
   min_age,
-  limit
+  limit,
+  page
 ) => {
   const validColumns = ["age", "cost_at_auction", "treasure_name"];
 
@@ -37,10 +38,18 @@ exports.selectTreasures = (
   }
   queryStr += ` ORDER BY ${sort_by}`;
 
+  let sqlLimit = 0;
   if (!limit) {
-    queryStr += " LIMIT 5";
+    sqlLimit = 3;
+    queryStr += ` LIMIT ${sqlLimit}`;
   } else {
-    queryStr += ` LIMIT ${limit}`;
+    sqlLimit = limit;
+    queryStr += ` LIMIT ${sqlLimit}`;
+  }
+
+  if (page) {
+    const offset = (Number(page) - 1) * sqlLimit;
+    queryStr += ` OFFSET ${offset}`;
   }
 
   if (userOrder) {
@@ -54,7 +63,7 @@ exports.selectTreasures = (
       });
     }
   }
-  console.log(queryStr);
+  // console.log(queryStr);
   return db.query(queryStr, queryValues).then((result) => {
     if (result.rows.length === 0) {
       return Promise.reject({

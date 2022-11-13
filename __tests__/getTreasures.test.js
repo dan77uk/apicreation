@@ -131,7 +131,7 @@ describe("/api/treasures", () => {
 
   test.only("GET: 200 - can filter an array of treasures by min_age query", () => {
     return request(app)
-      .get("/api/treasures?sort_by=treasure_name&limit=10&colour=turquoise")
+      .get("/api/treasures?sort_by=treasure_name&limit=3&page=3")
       .expect(200)
       .then(({ body }) => {
         console.log(body.treasures);

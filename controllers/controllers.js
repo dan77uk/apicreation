@@ -5,8 +5,8 @@ const { deleteTreasureById } = require("../models/deleteTreasureById");
 const { selectShops } = require("../models/selectShops");
 
 exports.getTreasures = (req, res, next) => {
-  const { sort_by, order, colour, max_age, min_age, limit } = req.query;
-  selectTreasures(sort_by, order, colour, max_age, min_age, limit)
+  const { sort_by, order, colour, max_age, min_age, limit, page } = req.query;
+  selectTreasures(sort_by, order, colour, max_age, min_age, limit, page)
     .then((result) => {
       res.status(200).send({ treasures: result });
     })
