@@ -105,4 +105,27 @@ describe("/api/treasures", () => {
         expect(body.msg).toBe("No resource found");
       });
   });
+
+  test("GET: 200 - can filter an array of treasures by max_age query", () => {
+    return request(app)
+      .get("/api/treasures?max_age=13")
+      .expect(200)
+      .then(({ body }) => {
+        body.treasures.forEach((item) => {
+          expect(item.age).toBeLessThan(14);
+        });
+      });
+  });
+
+  test.only("GET: 200 - can filter an array of treasures by min_age query", () => {
+    return request(app)
+      .get("/api/treasures?min_age=50")
+      .expect(200)
+      .then(({ body }) => {
+        // console.log(body.treasures);
+        body.treasures.forEach((item) => {
+          expect(item.age).toBeGreaterThan(50);
+        });
+      });
+  });
 });

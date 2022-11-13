@@ -21,7 +21,6 @@ describe("DELETE /api/treasure/:treasure_id", () => {
       .query(`SELECT COUNT (treasure_id) FROM treasures;`)
       .then(({ rows }) => {
         const originalTableSize = Number(rows[0].count);
-        console.log(originalTableSize);
         return request(app)
           .delete("/api/treasures/1")
           .expect(204)

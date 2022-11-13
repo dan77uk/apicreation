@@ -1,6 +1,12 @@
 const db = require("../db/index");
 
-exports.selectTreasures = (sort_by = "age", userOrder, colour) => {
+exports.selectTreasures = (
+  sort_by = "age",
+  userOrder,
+  colour,
+  max_age,
+  min_age
+) => {
   const validColumns = ["age", "cost_at_auction", "treasure_name"];
 
   if (!validColumns.includes(sort_by)) {
@@ -14,6 +20,14 @@ exports.selectTreasures = (sort_by = "age", userOrder, colour) => {
   treasures.cost_at_auction,
   shops.shop_name
   FROM treasures JOIN shops ON treasures.shop_id = shops.shop_id`;
+
+  if (min_age && !/[A-Za-z]/g.test(min_age)) {
+    queryStr += ` WHERE treasures.age >= ${min_age}`;
+  }
+
+  if (max_age && !/[A-Za-z]/g.test(max_age)) {
+    queryStr += ` WHERE treasures.age <= ${max_age}`;
+  }
 
   const queryValues = [];
   if (colour) {
