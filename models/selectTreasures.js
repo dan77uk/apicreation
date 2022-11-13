@@ -5,7 +5,8 @@ exports.selectTreasures = (
   userOrder,
   colour,
   max_age,
-  min_age
+  min_age,
+  limit
 ) => {
   const validColumns = ["age", "cost_at_auction", "treasure_name"];
 
@@ -36,6 +37,12 @@ exports.selectTreasures = (
   }
   queryStr += ` ORDER BY ${sort_by}`;
 
+  if (!limit) {
+    queryStr += " LIMIT 5";
+  } else {
+    queryStr += ` LIMIT ${limit}`;
+  }
+
   if (userOrder) {
     const validOrder = ["desc", "asc"];
     if (validOrder.includes(userOrder)) {
@@ -47,7 +54,7 @@ exports.selectTreasures = (
       });
     }
   }
-
+  console.log(queryStr);
   return db.query(queryStr, queryValues).then((result) => {
     if (result.rows.length === 0) {
       return Promise.reject({

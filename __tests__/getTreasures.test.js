@@ -117,7 +117,7 @@ describe("/api/treasures", () => {
       });
   });
 
-  test.only("GET: 200 - can filter an array of treasures by min_age query", () => {
+  test("GET: 200 - can filter an array of treasures by min_age query", () => {
     return request(app)
       .get("/api/treasures?min_age=50")
       .expect(200)
@@ -126,6 +126,16 @@ describe("/api/treasures", () => {
         body.treasures.forEach((item) => {
           expect(item.age).toBeGreaterThan(50);
         });
+      });
+  });
+
+  test.only("GET: 200 - can filter an array of treasures by min_age query", () => {
+    return request(app)
+      .get("/api/treasures?sort_by=treasure_name&limit=10&colour=turquoise")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body.treasures);
+        body.treasures.forEach((item) => {});
       });
   });
 });
